@@ -1,30 +1,49 @@
 # node-red-contrib-trexmes-oee-calculator
 
-This is a [Node-Red][1] package that enables communication with a Trex Mes IoT-IoBox hardware via serial port (rs232).
-IoT-IoBox is an economical automation device whose hardware accepts 12 digital input signals and produces 4 digital output signals.
-The counter total information is produced by counting the changes that occur with the 0-1 change of the signal belonging to the 12 inputs. Likewise, the cycle time of the 0-1 change of each input is also calculated in milliseconds into the card.
-The last status of 4 output signals, together with these 12 input, counter and cycle values, can be read instantly with this Node-red node, and the last status of each selected signal value can be taken as a node output.
+This is a [Node-Red][1] is produced to provide instant calculation of OEE industrial values with the data coming from the IoBox serial communication hardware device used in Trex Mes systems.
+At the end of the production cycle time, instant Availability, Performance, Quality and OEE values are calculated and sent to the node output.
+A continuous data feed is required for calculations to be made.
+The expected input data should be as follows.
+
+```javascript
+{
+	stoppage: "0"
+	working: "1"
+	itemcount: "17"
+	wasteitemcount: "3"
+	interval: 15
+	expecteditemcount: 6
+}
+```
+Here
+stoppage : Digital (0 / 1) signal at the time of stop
+working : Digital (0 / 1) working signal from the machine
+itemcount: Total number of production instantly
+wasteitemcount: Instantly total waste production
+interval : Production Cycle time or production frequency to be calculated
+expecteditemcount: The expected production number within the entered cycle time.
+
+
+Example output of the node.
+
+```javascript
+{
+    availability: "0.83",
+    performance: "0.80",
+    quality: "0.80",
+    oee: "0.53"    
+}
+```
+
+https://trexakademi.com/oee/
 
 # Install
 
 Run the following command in the root directory of your Node-RED install
 
-    npm install node-red-trexmes-iot-iobox
+    npm install node-red-contrib-trexmes-oee-calculator
 
-# Usage
-Example output of the node.
-```javascript
-{
-    "StationNo": "2810-L647-FIL01",
-    "StationName": "CAN FILLER",
-    "PStopCauseId": 150,
-    "PStopCauseName": "IS02 - electric parts",
-    "Description": "",
-    "DetailDesc": "",
-    "StartTime": "2023-04-21T00:19:35.0004122+03:00",
-    "SenderLocation": 50
-}
-```
+
 # Requirements
 
 The package currently requires [Node.js 10][1] or higher.

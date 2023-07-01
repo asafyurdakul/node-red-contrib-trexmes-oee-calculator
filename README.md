@@ -15,13 +15,13 @@ The expected input data should be as follows.
 	expecteditemcount: 6
 }
 ```
-Here
-stoppage : Digital (0 / 1) signal at the time of stop
-working : Digital (0 / 1) working signal from the machine
-itemcount: Total number of production instantly
-wasteitemcount: Instantly total waste production
-interval : Production Cycle time or production frequency to be calculated
-expecteditemcount: The expected production number within the entered cycle time.
+Here<br>
+**stoppage :** Digital (0 / 1) signal at the time of stop<br>
+**working :** Digital (0 / 1) working signal from the machine<br>
+**itemcount :** Total number of production instantly<br>
+**wasteitemcount :** Instantly total waste production<br>
+**interval :** Production Cycle time or production frequency to be calculated<br>
+**expecteditemcount :** The expected production number within the entered cycle time.<br>
 
 
 Example output of the node.

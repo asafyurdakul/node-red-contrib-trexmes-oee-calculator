@@ -1,0 +1,31 @@
+{
+  "name": "red-contrib-trexmes-oee-calculator",
+  "version": "1.0.0",
+  "description": "TrexMes OEE Calculator from IoBox Data",
+  "keywords": [
+    "node-red",
+    "TrexMes",
+    "oee",
+    "IoBox"
+  ],
+  "author": "Asaf Yurdakul",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/asafyurdakul/red-contrib-trexmes-oee-calculator",  
+  "node-red": {
+    "nodes": {
+      "oee-calculator": "oeecalculator.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asafyurdakul/red-contrib-trexmes-oee-calculator"
+  },
+  "private": false,
+  "main": "oeecalculator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

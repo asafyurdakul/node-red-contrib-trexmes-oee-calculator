@@ -1,0 +1,60 @@
+<script type="text/javascript">
+	RED.nodes.registerType('oee-calculator',{
+        category: 'trexmes',
+        defaults: {
+            name: {name:""},
+			interval : {value : 60},
+			expecteditemcount : {value : 15}			
+        },
+        color:"#3FADB5",
+        inputs:1,
+        outputs:1,
+        icon: "trex.png",
+        label: function() {
+            return this.name||"oee-calculator";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+		oneditsave: function() {
+
+			
+        },
+		oneditprepare : function() {
+			$("#node-input-interval").typedInput({
+				type:"str",
+				types:["num"],
+				typeField: "#node-input-interval-type"
+			});
+			$("#node-input-itemcount").typedInput({
+				type:"str",
+				types:["num"],
+				typeField: "#node-input-itemcount-type"
+			});
+		}
+    });	
+	
+</script>
+
+<script type="text/html" data-template-name="oee-calculator">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+	
+	<div class="form-row">
+		<label for="node-input-interval"><i class="fa fa-tag"></i> Interval (sn)</label>
+        <input type="text" id="node-input-interval" placeholder="The Interval to collect data on (seconds)">		
+	</div>
+	
+	<div class="form-row">
+		<label for="node-input-itemcount"><i class="fa fa-tag"></i> Item Count</label>
+        <input type="text" id="node-input-itemcount" placeholder="Expected Item Count">		
+	</div>
+	
+</script>
+
+<script type="text/html" data-help-name="oee-calculator">
+    <p>Trex Mes Oee Calculator from IoT-IoBox data </p>
+	<a href="https://www.mertyazilim.com.tr" target="_blank">www.mertyazilim.com.tr</a>
+</script>

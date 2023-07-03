@@ -112,13 +112,12 @@ module.exports = function(RED) {
 				//msg.payload.stoppageTime = oee.stoppageTime;				
 				//msg.payload.realWorkingTime = oee.workingTime - oee.stoppageTime;
 				
-				if (msg.payload.hasOwnProperty("itemcount") && msg.payload.hasOwnProperty("wasteitemcount")) {
-					msg.payload.availability = (((oee.workingTime - oee.stoppageTime)/1000)/config.interval).toFixed(2);
-					msg.payload.performance = ( (config.interval/config.expecteditemcount) * (oee.itemCount - oee.badItemCount) / ((oee.workingTime - oee.stoppageTime)/1000) ).toFixed(2);
-					msg.payload.quality = ((oee.itemCount - oee.badItemCount) / oee.itemCount).toFixed(2);
-					msg.payload.oee = (msg.payload.availability * msg.payload.performance * msg.payload.quality).toFixed(2);
-				}
-								
+				msg.payload.availability = (((oee.workingTime - oee.stoppageTime)/1000)/config.interval).toFixed(2);
+				msg.payload.performance = ( (config.interval/config.expecteditemcount) * (oee.itemCount - oee.badItemCount) / ((oee.workingTime - oee.stoppageTime)/1000) ).toFixed(2);
+				msg.payload.quality = ((oee.itemCount - oee.badItemCount) / oee.itemCount).toFixed(2);
+				msg.payload.oee = (msg.payload.availability * msg.payload.performance * msg.payload.quality).toFixed(2);
+				
+				
 				this.status({fill:"green",shape:"dot",text:"calculated"});
 				node.send(msg);
 				startDate = new Date();	

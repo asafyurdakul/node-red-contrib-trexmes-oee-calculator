@@ -46,7 +46,7 @@ Run the following command in the root directory of your Node-RED install
 
 # Requirements
 
-The package currently requires [Node.js 18.16][1] or higher.
+The package currently requires [Node.js 18.16][2] or higher.
 
 
 # Authors
@@ -54,5 +54,6 @@ The package currently requires [Node.js 18.16][1] or higher.
 [Asaf Yurdakul][4]
 
 [1]:http://nodered.org
+[2]:https://nodejs.org
 [4]:https://github.com/asafyurdakul
 

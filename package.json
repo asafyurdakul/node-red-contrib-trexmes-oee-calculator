@@ -1,6 +1,6 @@
 {
   "name": "nodered-contrib-trexmes-oee-calculator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "TrexMes OEE Calculator from IoBox Data",
   "keywords": [
     "node-red",

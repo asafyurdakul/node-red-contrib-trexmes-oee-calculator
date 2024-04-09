@@ -30,8 +30,13 @@ module.exports = function (RED) {
 		let startedWasteItemcount = 0;
 		let isStartedWasteItemCount = false;
 
-		let totalWorkTime = 0;
-		let totalStopTime = 0;
+		//let totalWorkTime = 0;
+		let isStartedWorkTime = false;
+		let startedTotalWorkTime = 0;
+
+		//let totalStopTime = 0;
+		let isStartedStopTime = false;
+		let startedTotalStopTime = 0;
 
 		node.on('input', function (msg) {
 			// do nothing unless we have a payload
@@ -58,12 +63,14 @@ module.exports = function (RED) {
 				isStartedWasteItemCount = true;
 			}
 
-			if (msg.payload.hasOwnProperty("workingTime")) {
-				totalWorkTime = totalWorkTime + msg.payload.workingTime;
+			if (msg.payload.hasOwnProperty("workingTime") && !isStartedWorkTime) {
+				startedTotalWorkTime = msg.payload.workingTime;
+				isStartedWorkTime = true;
 			}
 
-			if (msg.payload.hasOwnProperty("stoppageTime")) {
-				totalStopTime = totalStopTime + msg.payload.stoppageTime;
+			if (msg.payload.hasOwnProperty("stoppageTime") && !isStartedStopTime) {
+				startedTotalStopTime = msg.payload.stoppageTime;
+				isStartedStopTime = true;
 			}
 
 
@@ -79,19 +86,11 @@ module.exports = function (RED) {
 				if (msg.payload.hasOwnProperty("itemcount") && msg.payload.hasOwnProperty("wasteitemcount")) {
 					oee.itemCount = msg.payload.itemcount - startedItemcount;
 					oee.badItemCount = msg.payload.wasteitemcount - startedWasteItemcount;
-					oee.workingTime = totalWorkTime ;
-					oee.stoppageTime = totalStopTime;
-				}
-
-				let inputs = {
-					"itemcount": msg.payload.itemcount,
-					"wasteitemcount": msg.payload.wasteitemcount,
-					"interval": msg.payload.interval,
-					"expecteditemcount": msg.payload.expecteditemcount,
+					oee.workingTime = msg.payload.workingTime - startedTotalWorkTime;
+					oee.stoppageTime = msg.payload.stoppageTime - startedTotalStopTime;
 				}
 
 				msg.payload = {}
-				msg.payload.inputs = inputs;
 
 
 				msg.payload.availability = (((oee.workingTime - oee.stoppageTime) / 1000) / config.interval).toFixed(2);
@@ -100,8 +99,8 @@ module.exports = function (RED) {
 				msg.payload.oee = (msg.payload.availability * msg.payload.performance * msg.payload.quality).toFixed(2);
 
 				msg.payload.details = {
-					itemCount : oee.itemCount,
-					badItemCount : oee.badItemCount,
+					itemCount: oee.itemCount,
+					badItemCount: oee.badItemCount,
 					goodItemCount: oee.itemCount - oee.badItemCount,
 					totalWorkTime: oee.workingTime,
 					totalStoppageTime: oee.stoppageTime,
@@ -112,14 +111,18 @@ module.exports = function (RED) {
 				node.send(msg);
 
 				startDate = new Date();
-				totalWorkTime = 0;
-				totalStopTime = 0;
+
 				startedItemcount = 0;
 				isStartedItemCount = false;
+
 				startedWasteItemcount = 0;
 				isStartedWasteItemCount = false;
 
-				
+				isStartedWorkTime = false;
+				startedTotalWorkTime = 0;
+
+				isStartedStopTime = false;
+				startedTotalStopTime = 0;
 			}
 
 		});

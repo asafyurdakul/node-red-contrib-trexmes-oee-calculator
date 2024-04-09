@@ -90,6 +90,8 @@ module.exports = function (RED) {
 					oee.stoppageTime = msg.payload.stoppageTime - startedTotalStopTime;
 				}
 
+				let input = msg.payload;
+
 				msg.payload = {}
 
 
@@ -98,6 +100,7 @@ module.exports = function (RED) {
 				msg.payload.quality = ((oee.itemCount - oee.badItemCount) / oee.itemCount).toFixed(2);
 				msg.payload.oee = (msg.payload.availability * msg.payload.performance * msg.payload.quality).toFixed(2);
 
+				msg.payload.inputValues = input;
 				msg.payload.details = {
 					itemCount: oee.itemCount,
 					badItemCount: oee.badItemCount,

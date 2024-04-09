@@ -24,29 +24,20 @@ module.exports = function (RED) {
 		let node = this;
 
 		let startDate = new Date();
-		let lastDateTaken;// = new Date();
-
-		let workingInterval;
-		let workingTime = 0;
-		let workingStartStop = false;
-
-		let stoppageInterval;
-		let stoppageTime = 0;
-		let stoppageStartStop = false;
-
 		let startedItemcount = 0;
 		let isStartedItemCount = false;
 
 		let startedWasteItemcount = 0;
 		let isStartedWasteItemCount = false;
 
+		let totalWorkTime = 0;
+		let totalStopTime = 0;
+
 		node.on('input', function (msg) {
 			// do nothing unless we have a payload
 			if (!msg.hasOwnProperty("payload")) {
 				return;
 			}
-
-			lastDateTaken = new Date();
 
 			if (msg.payload.hasOwnProperty("interval")) {
 				config.interval = msg.payload.interval;
@@ -67,30 +58,12 @@ module.exports = function (RED) {
 				isStartedWasteItemCount = true;
 			}
 
-			if (msg.payload.hasOwnProperty("working")) {
-				if (msg.payload.working == "1" && !workingStartStop) {
-					workingInterval = setInterval(() => {
-						workingTime++;
-					}, 10);
-					workingStartStop = true;
-				}
-				if (msg.payload.working == "0") {
-					clearInterval(workingInterval);
-					workingStartStop = false;
-				}
+			if (msg.payload.hasOwnProperty("workingTime")) {
+				totalWorkTime = totalWorkTime + msg.payload.workingTime;
 			}
 
-			if (msg.payload.hasOwnProperty("stoppage")) {
-				if (msg.payload.stoppage == "1" && !stoppageStartStop) {
-					stoppageInterval = setInterval(()=>{
-						stoppageTime++;
-					}, 10);
-					stoppageStartStop = true;
-				}
-				if (msg.payload.stoppage == "0") {
-					clearInterval(stoppageInterval);
-					stoppageStartStop = false;
-				}
+			if (msg.payload.hasOwnProperty("stoppageTime")) {
+				totalStopTime = totalStopTime + msg.payload.stoppageTime;
 			}
 
 
@@ -106,13 +79,11 @@ module.exports = function (RED) {
 				if (msg.payload.hasOwnProperty("itemcount") && msg.payload.hasOwnProperty("wasteitemcount")) {
 					oee.itemCount = msg.payload.itemcount - startedItemcount;
 					oee.badItemCount = msg.payload.wasteitemcount - startedWasteItemcount;
-					oee.workingTime = workingTime * 10;
-					oee.stoppageTime = stoppageTime * 10;
+					oee.workingTime = totalWorkTime ;
+					oee.stoppageTime = totalStopTime;
 				}
 
 				let inputs = {
-					"working": msg.payload.working,
-					"stoppage": msg.payload.stoppage,
 					"itemcount": msg.payload.itemcount,
 					"wasteitemcount": msg.payload.wasteitemcount,
 					"interval": msg.payload.interval,
@@ -132,20 +103,23 @@ module.exports = function (RED) {
 					itemCount : oee.itemCount,
 					badItemCount : oee.badItemCount,
 					goodItemCount: oee.itemCount - oee.badItemCount,
-					workingTime: oee.workingTime,
-					stoppageTime: oee.stoppageTime,
+					totalWorkTime: oee.workingTime,
+					totalStoppageTime: oee.stoppageTime,
 					realWorkingTime: oee.workingTime - oee.stoppageTime
 				};
 
 				this.status({ fill: "green", shape: "dot", text: "calculated" });
 				node.send(msg);
+
 				startDate = new Date();
-				workingTime = 0;
-				stoppageTime = 0;
+				totalWorkTime = 0;
+				totalStopTime = 0;
 				startedItemcount = 0;
 				isStartedItemCount = false;
 				startedWasteItemcount = 0;
 				isStartedWasteItemCount = false;
+
+				
 			}
 
 		});
